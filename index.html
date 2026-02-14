@@ -174,9 +174,12 @@
           <div class="trip-progress-fill" id="trip-progress"></div>
         </div>
         <div class="trip-status-row">
-          <span class="trip-status-text" id="trip-status-text">En route to destination</span>
+          <span class="trip-status-text" id="trip-status-text">Waiting for rider</span>
           <span class="trip-status-live">● LIVE</span>
         </div>
+
+        <!-- Start Ride Button (shown before OTP verification) -->
+        <button class="btn-start-ride" id="btn-start-ride">Start Ride</button>
 
         <!-- Nav actions row -->
         <div class="trip-nav-actions">
@@ -212,6 +215,26 @@
             <span>More</span>
           </button>
         </div>
+      </div>
+    </div>
+
+    <!-- ===== OTP POPUP OVERLAY ===== -->
+    <div id="otp-overlay" class="otp-overlay hidden">
+      <div class="otp-card">
+        <div class="otp-title">Enter Ride OTP</div>
+        <div class="otp-subtitle">Ask the rider for their 4-digit code</div>
+        <div class="otp-inputs">
+          <input type="tel" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="otp-digit" id="otp-1"
+            autocomplete="off" />
+          <input type="tel" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="otp-digit" id="otp-2"
+            autocomplete="off" />
+          <input type="tel" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="otp-digit" id="otp-3"
+            autocomplete="off" />
+          <input type="tel" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="otp-digit" id="otp-4"
+            autocomplete="off" />
+        </div>
+        <button class="otp-verify-btn" id="otp-verify-btn" disabled>Verify & Start</button>
+        <button class="otp-cancel-btn" id="otp-cancel-btn">Cancel</button>
       </div>
     </div>
 

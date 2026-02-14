@@ -22,6 +22,13 @@ const carIndicator = document.querySelector('.car-indicator');
 
 let glitchTriggered = false;
 
+// OTP elements
+const btnStartRide = document.getElementById('btn-start-ride');
+const otpOverlay = document.getElementById('otp-overlay');
+const otpVerifyBtn = document.getElementById('otp-verify-btn');
+const otpCancelBtn = document.getElementById('otp-cancel-btn');
+const otpDigits = [1, 2, 3, 4].map(i => document.getElementById('otp-' + i));
+
 // ========== GPS TRACKING ==========
 // The map canvas is translated so the "current position" is at screen center.
 // GPS shifts that current position, which shifts the canvas.
@@ -438,7 +445,6 @@ btnAccept.addEventListener('click', () => {
     { text: 'Marine Drive', x: 220, y: 105 },
   ]);
 
-  startTripProgress();
   startRoadNameRotation();
   initGPSTracking();
 });
@@ -635,4 +641,60 @@ popupOkBtn.addEventListener('click', () => {
       tripStatusText.textContent = 'Arriving at destination';
     }
   }, 600);
+});
+
+// ========== START RIDE → OTP FLOW ==========
+btnStartRide.addEventListener('click', () => {
+  otpOverlay.classList.remove('hidden');
+  // Clear previous values
+  otpDigits.forEach(d => { d.value = ''; d.classList.remove('filled'); });
+  otpVerifyBtn.disabled = true;
+  // Focus first digit
+  setTimeout(() => otpDigits[0].focus(), 100);
+});
+
+// OTP digit auto-advance
+otpDigits.forEach((input, idx) => {
+  input.addEventListener('input', (e) => {
+    const val = e.target.value.replace(/\D/g, ''); // only digits
+    e.target.value = val.slice(0, 1);
+
+    if (val) {
+      input.classList.add('filled');
+      // Auto-focus next
+      if (idx < 3) otpDigits[idx + 1].focus();
+    } else {
+      input.classList.remove('filled');
+    }
+
+    // Check if all 4 are filled
+    const allFilled = otpDigits.every(d => d.value.length === 1);
+    otpVerifyBtn.disabled = !allFilled;
+  });
+
+  input.addEventListener('keydown', (e) => {
+    // Backspace: clear and go to previous
+    if (e.key === 'Backspace' && !input.value && idx > 0) {
+      otpDigits[idx - 1].focus();
+      otpDigits[idx - 1].value = '';
+      otpDigits[idx - 1].classList.remove('filled');
+      otpVerifyBtn.disabled = true;
+    }
+  });
+
+  // Select all on focus for easy overwrite
+  input.addEventListener('focus', () => input.select());
+});
+
+// Verify OTP → Start the ride
+otpVerifyBtn.addEventListener('click', () => {
+  otpOverlay.classList.add('hidden');
+  btnStartRide.classList.add('hidden');
+  tripStatusText.textContent = 'En route to destination';
+  startTripProgress();
+});
+
+// Cancel OTP
+otpCancelBtn.addEventListener('click', () => {
+  otpOverlay.classList.add('hidden');
 });
