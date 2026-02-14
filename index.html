@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="theme-color" content="#000000" />
+  <title>Driver App</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="/style.css" />
+</head>
+
+<body>
+  <div id="app">
+    <!-- ===== SCREEN 1: Ride Request ===== -->
+    <div id="screen-request" class="screen active">
+      <!-- Fake map background for home screen -->
+      <div class="request-bg">
+        <canvas id="home-map-canvas"></canvas>
+        <div class="dark-overlay"></div>
+      </div>
+
+      <div class="request-header">
+        <div class="header-left">
+          <div class="hamburger">
+            <span></span><span></span><span></span>
+          </div>
+        </div>
+        <div class="header-center">
+          <div class="status-badge online">
+            <span class="status-dot"></span> Online
+          </div>
+        </div>
+        <div class="header-right">
+          <div class="earnings-badge">₹2,340</div>
+        </div>
+      </div>
+
+      <!-- Pickup proximity badge -->
+      <div class="pickup-proximity">
+        <div class="proximity-pin">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path
+              d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"
+              fill="#00d26a" />
+          </svg>
+        </div>
+        <span class="proximity-text">Pickup <strong>400m</strong> away</span>
+      </div>
+
+      <div class="request-card-wrapper">
+        <div class="request-incoming-label">
+          <div class="incoming-pulse"></div>
+          NEW RIDE REQUEST
+        </div>
+
+        <div class="request-card">
+          <div class="request-fare-section">
+            <div class="fare-amount">₹650</div>
+            <div class="fare-label">Estimated Fare</div>
+            <div class="fare-details">
+              <span class="fare-tag cash">💵 Cash</span>
+              <span class="fare-tag distance">📍 12.4 km</span>
+              <span class="fare-tag time">⏱ 35 min</span>
+            </div>
+          </div>
+
+          <div class="request-divider"></div>
+
+          <div class="request-rider">
+            <div class="rider-avatar">C</div>
+            <div class="rider-info">
+              <div class="rider-name">Chanda</div>
+              <div class="rider-rating">⭐ 5.0 · 0 rides</div>
+            </div>
+          </div>
+
+          <div class="request-divider"></div>
+
+          <div class="route-info">
+            <div class="route-point pickup">
+              <div class="route-dot pickup-dot"></div>
+              <div class="route-text">
+                <div class="route-label">PICKUP</div>
+                <div class="route-address">Dadar TT Circle, Dadar West, Mumbai</div>
+              </div>
+            </div>
+            <div class="route-line"></div>
+            <div class="route-point drop">
+              <div class="route-dot drop-dot"></div>
+              <div class="route-text">
+                <div class="route-label">DROP</div>
+                <div class="route-address">Marine Drive Promenade, Churchgate, Mumbai</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="request-actions">
+          <button class="btn-decline" id="btn-decline">✕</button>
+          <button class="btn-accept" id="btn-accept">
+            <div class="accept-ring ring-1"></div>
+            <div class="accept-ring ring-2"></div>
+            <div class="accept-ring ring-3"></div>
+            <span class="accept-text">ACCEPT</span>
+          </button>
+          <div class="timer-ring" id="request-timer">
+            <svg viewBox="0 0 60 60">
+              <circle cx="30" cy="30" r="28" class="timer-bg" />
+              <circle cx="30" cy="30" r="28" class="timer-progress" />
+            </svg>
+            <span class="timer-text">15</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== SCREEN 2: Fake Map / Navigation ===== -->
+    <div id="screen-map" class="screen">
+      <div class="map-container" id="map-container">
+        <canvas id="map-canvas"></canvas>
+        <div class="car-indicator">
+          <div class="car-dot"></div>
+          <div class="car-direction"></div>
+        </div>
+        <!-- Navigation turn icon overlay -->
+        <div class="nav-turn-overlay" id="nav-turn-overlay">
+          <div class="nav-turn-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+              <path d="M9 5L5 9l4 4" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+              <path d="M5 9h9a5 5 0 0 1 5 5v5" stroke="#fff" stroke-width="2.5" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
+          </div>
+          <span class="nav-turn-text" id="nav-turn-text">Turn left onto SV Rd</span>
+          <span class="nav-turn-dist" id="nav-turn-dist">250 m</span>
+        </div>
+      </div>
+
+      <div class="nav-header">
+        <div class="nav-info">
+          <div class="nav-eta">
+            <span class="eta-time">35</span>
+            <span class="eta-unit">min</span>
+          </div>
+          <div class="nav-divider-v"></div>
+          <div class="nav-dist">
+            <span class="dist-value">12.4</span>
+            <span class="dist-unit">km</span>
+          </div>
+        </div>
+        <div class="nav-direction-hint">
+          <span class="direction-icon">↗</span>
+          <span id="nav-road-name">Continue on Dr Babasaheb Ambedkar Rd</span>
+        </div>
+      </div>
+
+      <div class="trip-bottom-card">
+        <div class="trip-rider-row">
+          <!-- Clicking this avatar triggers the glitch -->
+          <div class="trip-rider-avatar glitch-trigger-avatar" id="glitch-trigger-avatar">C</div>
+          <div class="trip-rider-info">
+            <div class="trip-rider-name">Chanda</div>
+            <div class="trip-rider-dest">Marine Drive Promenade, Churchgate</div>
+          </div>
+          <div class="trip-fare">₹650</div>
+        </div>
+        <div class="trip-progress-bar">
+          <div class="trip-progress-fill" id="trip-progress"></div>
+        </div>
+        <div class="trip-status-row">
+          <span class="trip-status-text" id="trip-status-text">En route to destination</span>
+          <span class="trip-status-live">● LIVE</span>
+        </div>
+
+        <!-- Nav actions row -->
+        <div class="trip-nav-actions">
+          <button class="nav-action-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"
+                stroke="#8e8e9a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <span>Call</span>
+          </button>
+          <button class="nav-action-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" stroke="#8e8e9a" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <span>Message</span>
+          </button>
+          <button class="nav-action-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <path d="M12 22s-8-4.5-8-11.8A8 8 0 0112 2a8 8 0 018 8.2c0 7.3-8 11.8-8 11.8z" stroke="#8e8e9a"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              <circle cx="12" cy="10" r="3" stroke="#8e8e9a" stroke-width="2" />
+            </svg>
+            <span>Navigate</span>
+          </button>
+          <button class="nav-action-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="1" fill="#8e8e9a" />
+              <circle cx="19" cy="12" r="1" fill="#8e8e9a" />
+              <circle cx="5" cy="12" r="1" fill="#8e8e9a" />
+            </svg>
+            <span>More</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== GLITCH OVERLAY ===== -->
+    <div id="glitch-overlay" class="glitch-overlay hidden">
+      <div class="glitch-layer glitch-r"></div>
+      <div class="glitch-layer glitch-g"></div>
+      <div class="glitch-layer glitch-b"></div>
+      <div class="glitch-scanlines"></div>
+      <div class="glitch-noise"></div>
+    </div>
+
+    <!-- ===== POPUP OVERLAY ===== -->
+    <div id="popup-overlay" class="popup-overlay hidden">
+      <div class="popup-card">
+        <div class="popup-icon">⚠️</div>
+        <div class="popup-title">Ride Updated</div>
+        <div class="popup-subtitle">Destination has been changed by rider</div>
+        <div class="popup-divider"></div>
+        <div class="popup-new-dest">
+          <div class="popup-dest-label">NEW DESTINATION</div>
+          <div class="popup-dest-address">Jogeshwari Vikhroli Link Rd, Jogeshwari East, Mumbai</div>
+        </div>
+        <div class="popup-fare-change">
+          <span>Updated Fare</span>
+          <span class="popup-new-fare">₹820</span>
+        </div>
+        <button class="popup-btn" id="popup-ok-btn">Continue Ride</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="/main.js"></script>
+</body>
+
+</html>
