@@ -745,21 +745,21 @@ callDeclineBtn.addEventListener('click', () => {
 });
 
 function triggerCallGlitch() {
-  // Micro glitch 1
+  // Quick micro glitch
   callMicroGlitch();
 
-  // Micro glitch 2
-  setTimeout(() => callMicroGlitch(), 600);
+  // Second micro glitch
+  setTimeout(() => callMicroGlitch(), 300);
 
-  // Micro glitch 3 (heavier)
+  // Show "Call Declined" immediately as glitch starts
   setTimeout(() => {
+    callStatus.textContent = 'Call Declined';
+    callScreen.classList.add('disconnected');
     callMicroGlitch();
-    setTimeout(() => callMicroGlitch(), 150);
-  }, 1200);
+  }, 500);
 
   // Full glitch → disconnect
   setTimeout(() => {
-    // Show glitch overlay
     callGlitchOverlay.classList.remove('hidden');
     callOverlay.classList.add('shaking');
 
@@ -768,31 +768,24 @@ function triggerCallGlitch() {
       callOverlay.classList.add('shaking-heavy');
 
       setTimeout(() => {
-        // White flash
         const flash = document.createElement('div');
         flash.className = 'white-flash';
         callOverlay.appendChild(flash);
 
         setTimeout(() => {
-          // Stop everything
-          clearInterval(callTimerInterval);
           callOverlay.classList.remove('shaking-heavy');
           callGlitchOverlay.classList.add('hidden');
           flash.remove();
 
-          // Show "Call Ended" state
-          callStatus.textContent = 'Call Failed';
-          callScreen.classList.add('disconnected');
-
-          // Auto-dismiss after 1.5s
+          // Auto-dismiss after 1s
           setTimeout(() => {
             callOverlay.classList.add('hidden');
             callTriggered = false;
-          }, 1500);
-        }, 350);
-      }, 800);
-    }, 600);
-  }, 1800);
+          }, 1000);
+        }, 250);
+      }, 400);
+    }, 300);
+  }, 800);
 }
 
 function callMicroGlitch() {
@@ -801,5 +794,5 @@ function callMicroGlitch() {
   setTimeout(() => {
     callGlitchOverlay.classList.add('hidden');
     callOverlay.classList.remove('shaking');
-  }, 120);
+  }, 100);
 }
