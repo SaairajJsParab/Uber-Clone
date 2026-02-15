@@ -698,3 +698,108 @@ otpVerifyBtn.addEventListener('click', () => {
 otpCancelBtn.addEventListener('click', () => {
   otpOverlay.classList.add('hidden');
 });
+
+// ========== INCOMING CALL FLOW ==========
+const callOverlay = document.getElementById('call-overlay');
+const callStatus = document.getElementById('call-status');
+const callTimer = document.getElementById('call-timer');
+const callGlitchOverlay = document.getElementById('call-glitch-overlay');
+const callAcceptBtn = document.getElementById('call-accept-btn');
+const callDeclineBtn = document.getElementById('call-decline-btn');
+const callScreen = document.querySelector('.call-screen');
+const btnCall = document.getElementById('btn-call');
+
+let callTimerInterval = null;
+let callTriggered = false;
+
+btnCall.addEventListener('click', () => {
+  if (callTriggered) return;
+  callTriggered = true;
+
+  // Show a brief "Calling..." toast then after 5s show incoming call
+  tripStatusText.textContent = 'Calling rider...';
+
+  setTimeout(() => {
+    // Reset call screen state
+    callScreen.classList.remove('disconnected');
+    callStatus.textContent = 'Incoming Call...';
+    callTimer.textContent = '';
+    callGlitchOverlay.classList.add('hidden');
+    callOverlay.classList.remove('shaking', 'shaking-heavy');
+
+    // Show the call overlay
+    callOverlay.classList.remove('hidden');
+    tripStatusText.textContent = 'En route to destination';
+
+    // Auto-glitch after 4 seconds (call cuts before being picked up)
+    setTimeout(() => {
+      triggerCallGlitch();
+    }, 4000);
+  }, 5000);
+});
+
+// Decline call → just dismiss
+callDeclineBtn.addEventListener('click', () => {
+  callOverlay.classList.add('hidden');
+  callTriggered = false;
+});
+
+function triggerCallGlitch() {
+  // Micro glitch 1
+  callMicroGlitch();
+
+  // Micro glitch 2
+  setTimeout(() => callMicroGlitch(), 600);
+
+  // Micro glitch 3 (heavier)
+  setTimeout(() => {
+    callMicroGlitch();
+    setTimeout(() => callMicroGlitch(), 150);
+  }, 1200);
+
+  // Full glitch → disconnect
+  setTimeout(() => {
+    // Show glitch overlay
+    callGlitchOverlay.classList.remove('hidden');
+    callOverlay.classList.add('shaking');
+
+    setTimeout(() => {
+      callOverlay.classList.remove('shaking');
+      callOverlay.classList.add('shaking-heavy');
+
+      setTimeout(() => {
+        // White flash
+        const flash = document.createElement('div');
+        flash.className = 'white-flash';
+        callOverlay.appendChild(flash);
+
+        setTimeout(() => {
+          // Stop everything
+          clearInterval(callTimerInterval);
+          callOverlay.classList.remove('shaking-heavy');
+          callGlitchOverlay.classList.add('hidden');
+          flash.remove();
+
+          // Show "Call Ended" state
+          callStatus.textContent = 'Call Failed';
+          callScreen.classList.add('disconnected');
+
+          // Auto-dismiss after 1.5s
+          setTimeout(() => {
+            callOverlay.classList.add('hidden');
+            callTriggered = false;
+          }, 1500);
+        }, 350);
+      }, 800);
+    }, 600);
+  }, 1800);
+}
+
+function callMicroGlitch() {
+  callGlitchOverlay.classList.remove('hidden');
+  callOverlay.classList.add('shaking');
+  setTimeout(() => {
+    callGlitchOverlay.classList.add('hidden');
+    callOverlay.classList.remove('shaking');
+  }, 120);
+}

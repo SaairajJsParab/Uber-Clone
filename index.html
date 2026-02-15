@@ -183,7 +183,7 @@
 
         <!-- Nav actions row -->
         <div class="trip-nav-actions">
-          <button class="nav-action-btn">
+          <button class="nav-action-btn" id="btn-call">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
               <path
                 d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"
@@ -215,6 +215,42 @@
             <span>More</span>
           </button>
         </div>
+      </div>
+    </div>
+
+    <!-- ===== INCOMING CALL OVERLAY ===== -->
+    <div id="call-overlay" class="call-overlay hidden">
+      <div class="call-screen">
+        <div class="call-status" id="call-status">Incoming Call...</div>
+        <div class="call-avatar">P</div>
+        <div class="call-name">Pappu Bhai Juwa</div>
+        <div class="call-number">+91 98207 43156</div>
+        <div class="call-timer" id="call-timer"></div>
+        <div class="call-actions" id="call-actions">
+          <button class="call-btn call-decline" id="call-decline-btn">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M23 16.01l-3.39-2.26a2 2 0 00-2.22 0l-1.8 1.2a16 16 0 01-5.54-5.54l1.2-1.8a2 2 0 000-2.22L9 2a2 2 0 00-2.44-.5L3.34 3.13A2 2 0 002 5c0 9.94 8.06 18 18 18a2 2 0 001.87-1.34l1.63-3.22A2 2 0 0023 16.01z"
+                stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              <line x1="1" y1="1" x2="23" y2="23" stroke="#fff" stroke-width="2.5" stroke-linecap="round" />
+            </svg>
+          </button>
+          <button class="call-btn call-accept" id="call-accept-btn">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"
+                stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+        </div>
+      </div>
+      <!-- Glitch layers for call screen -->
+      <div class="call-glitch-overlay hidden" id="call-glitch-overlay">
+        <div class="glitch-layer glitch-r"></div>
+        <div class="glitch-layer glitch-g"></div>
+        <div class="glitch-layer glitch-b"></div>
+        <div class="glitch-scanlines"></div>
+        <div class="glitch-noise"></div>
       </div>
     </div>
 
