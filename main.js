@@ -332,6 +332,46 @@ startHomeMap();
 let requestTimer = 15;
 const circumference = 2 * Math.PI * 28;
 
+// ========== STAGGERED REQUEST POPUPS ==========
+const requestWaiting = document.getElementById('request-waiting');
+const requestList = document.getElementById('request-list');
+const requestCount = document.getElementById('request-count');
+const req1 = document.getElementById('req-1');
+const req2 = document.getElementById('req-2');
+const req3 = document.getElementById('req-3');
+const acceptPanel = document.getElementById('accept-panel');
+
+let reqTimerInterval = null;
+
+// After 3s, hide waiting state. Then pop in requests one by one.
+setTimeout(() => requestWaiting.classList.add('hidden'), 3000);
+
+// Req 1 (Rahul) pops in at 4s
+setTimeout(() => {
+  req1.classList.remove('hidden');
+  requestCount.textContent = '1';
+}, 4000);
+
+// Req 2 (Priya) pops in at 5.5s
+setTimeout(() => {
+  req2.classList.remove('hidden');
+  requestCount.textContent = '2';
+}, 5500);
+
+// Req 3 (Chanda) pops in at 7s
+setTimeout(() => {
+  req3.classList.remove('hidden');
+  requestCount.textContent = '3';
+}, 7000);
+
+// Tapping Chanda's card → show accept panel
+req3.addEventListener('click', () => {
+  requestList.style.display = 'none';
+  acceptPanel.classList.remove('hidden');
+  // Start the countdown timer when accept panel is shown
+  reqTimerInterval = startRequestTimer();
+});
+
 function startRequestTimer() {
   timerProgress.style.strokeDasharray = circumference;
   timerProgress.style.strokeDashoffset = 0;
@@ -351,8 +391,6 @@ function startRequestTimer() {
   }, 1000);
   return interval;
 }
-
-const reqTimerInterval = startRequestTimer();
 
 // ========== NAVIGATION MAP STATE ==========
 // The map is drawn much larger than the viewport (like a real map tile).

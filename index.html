@@ -41,66 +41,101 @@
         </div>
       </div>
 
-      <!-- Pickup proximity badge -->
-      <div class="pickup-proximity">
-        <div class="proximity-pin">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-            <path
-              d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"
-              fill="#00d26a" />
+      <!-- Waiting state (shown before requests come in) -->
+      <div class="request-waiting" id="request-waiting">
+        <div class="waiting-icon">
+          <div class="waiting-radar"></div>
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+            <path d="M12 22s-8-4.5-8-11.8A8 8 0 0112 2a8 8 0 018 8.2c0 7.3-8 11.8-8 11.8z" stroke="#8e8e9a"
+              stroke-width="2" />
+            <circle cx="12" cy="10" r="3" stroke="#8e8e9a" stroke-width="2" />
           </svg>
         </div>
-        <span class="proximity-text">Pickup <strong>400m</strong> away</span>
+        <span>Looking for ride requests...</span>
       </div>
 
-      <div class="request-card-wrapper">
-        <div class="request-incoming-label">
+      <!-- Request list (hidden initially) -->
+      <div class="request-list" id="request-list">
+        <div class="request-list-header">
           <div class="incoming-pulse"></div>
-          NEW RIDE REQUEST
+          <span>RIDE REQUESTS</span>
+          <span class="request-count" id="request-count">0</span>
         </div>
 
-        <div class="request-card">
-          <div class="request-fare-section">
-            <div class="fare-amount">₹650</div>
-            <div class="fare-label">Estimated Fare</div>
-            <div class="fare-details">
-              <span class="fare-tag cash">💵 Cash</span>
-              <span class="fare-tag distance">📍 12.4 km</span>
-              <span class="fare-tag time">⏱ 35 min</span>
+        <!-- Request 1: Rahul (disabled) -->
+        <div class="request-mini-card request-card-disabled hidden" id="req-1">
+          <div class="mini-card-left">
+            <div class="mini-avatar" style="background: linear-gradient(135deg, #f59e0b, #d97706);">R</div>
+            <div class="mini-info">
+              <div class="mini-name">Rahul M. <span class="mini-rating">⭐ 4.6</span></div>
+              <div class="mini-route">Andheri West → Bandra Kurla Complex</div>
+              <div class="mini-tags"><span>5.2 km</span><span>18 min</span><span>Cash</span></div>
             </div>
           </div>
-
-          <div class="request-divider"></div>
-
-          <div class="request-rider">
-            <div class="rider-avatar">C</div>
-            <div class="rider-info">
-              <div class="rider-name">Chanda</div>
-              <div class="rider-rating">⭐ 5.0 · 0 rides</div>
-            </div>
-          </div>
-
-          <div class="request-divider"></div>
-
-          <div class="route-info">
-            <div class="route-point pickup">
-              <div class="route-dot pickup-dot"></div>
-              <div class="route-text">
-                <div class="route-label">PICKUP</div>
-                <div class="route-address">Dadar TT Circle, Dadar West, Mumbai</div>
-              </div>
-            </div>
-            <div class="route-line"></div>
-            <div class="route-point drop">
-              <div class="route-dot drop-dot"></div>
-              <div class="route-text">
-                <div class="route-label">DROP</div>
-                <div class="route-address">Marine Drive Promenade, Churchgate, Mumbai</div>
-              </div>
-            </div>
+          <div class="mini-card-right">
+            <div class="mini-fare">₹180</div>
           </div>
         </div>
 
+        <!-- Request 2: Priya (disabled) -->
+        <div class="request-mini-card request-card-disabled hidden" id="req-2">
+          <div class="mini-card-left">
+            <div class="mini-avatar" style="background: linear-gradient(135deg, #ec4899, #db2777);">P</div>
+            <div class="mini-info">
+              <div class="mini-name">Priya S. <span class="mini-rating">⭐ 4.8</span></div>
+              <div class="mini-route">Lower Parel → Dadar TT Circle</div>
+              <div class="mini-tags"><span>3.1 km</span><span>12 min</span><span>UPI</span></div>
+            </div>
+          </div>
+          <div class="mini-card-right">
+            <div class="mini-fare">₹120</div>
+          </div>
+        </div>
+
+        <!-- Request 3: Chanda (selectable!) -->
+        <div class="request-mini-card request-card-chanda hidden" id="req-3">
+          <div class="mini-card-left">
+            <div class="mini-avatar" style="background: linear-gradient(135deg, #6366f1, #8b5cf6);">C</div>
+            <div class="mini-info">
+              <div class="mini-name">Chanda <span class="mini-rating">⭐ 5.0 · 0 rides</span></div>
+              <div class="mini-route">Dadar TT Circle → Marine Drive, Churchgate</div>
+              <div class="mini-tags"><span>12.4 km</span><span>35 min</span><span>Cash</span></div>
+            </div>
+          </div>
+          <div class="mini-card-right">
+            <div class="mini-fare chanda-fare">₹650</div>
+            <div class="mini-pickup">400m away</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Accept panel (shown when Chanda's card is tapped) -->
+      <div class="request-accept-panel hidden" id="accept-panel">
+        <div class="accept-panel-info">
+          <div class="rider-avatar" style="background: linear-gradient(135deg, #6366f1, #8b5cf6);">C</div>
+          <div class="accept-panel-details">
+            <div class="rider-name">Chanda</div>
+            <div class="rider-rating">⭐ 5.0 · 0 rides</div>
+          </div>
+          <div class="accept-panel-fare">₹650</div>
+        </div>
+        <div class="route-info">
+          <div class="route-point pickup">
+            <div class="route-dot pickup-dot"></div>
+            <div class="route-text">
+              <div class="route-label">PICKUP</div>
+              <div class="route-address">Dadar TT Circle, Dadar West, Mumbai</div>
+            </div>
+          </div>
+          <div class="route-line"></div>
+          <div class="route-point drop">
+            <div class="route-dot drop-dot"></div>
+            <div class="route-text">
+              <div class="route-label">DROP</div>
+              <div class="route-address">Marine Drive Promenade, Churchgate, Mumbai</div>
+            </div>
+          </div>
+        </div>
         <div class="request-actions">
           <button class="btn-decline" id="btn-decline">✕</button>
           <button class="btn-accept" id="btn-accept">

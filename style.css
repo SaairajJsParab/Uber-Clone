@@ -159,46 +159,243 @@ body {
     border: 1px solid var(--border-color);
 }
 
-/* Pickup Proximity Badge */
-.pickup-proximity {
-    position: relative;
+/* Waiting State */
+.request-waiting {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     z-index: 5;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 8px;
-    margin: 8px 20px 0;
-    padding: 10px 16px;
-    background: rgba(0, 210, 106, 0.08);
-    border: 1px solid rgba(0, 210, 106, 0.15);
-    border-radius: 12px;
-    width: fit-content;
+    gap: 16px;
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 500;
+    transition: opacity 0.4s ease;
 }
 
-.proximity-pin {
+.request-waiting.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.waiting-icon {
+    position: relative;
     display: flex;
     align-items: center;
+    justify-content: center;
 }
 
-.proximity-text {
-    font-size: 13px;
-    color: var(--accent-green);
-    font-weight: 500;
+.waiting-radar {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 2px solid rgba(142, 142, 154, 0.2);
+    animation: radarPulse 2s ease-out infinite;
 }
 
-.proximity-text strong {
-    font-weight: 800;
-    color: #fff;
+@keyframes radarPulse {
+    0% {
+        transform: scale(0.5);
+        opacity: 0.8;
+    }
+
+    100% {
+        transform: scale(2);
+        opacity: 0;
+    }
 }
 
-/* Ride Request Card */
-.request-card-wrapper {
+/* Request List */
+.request-list {
     position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
     z-index: 5;
-    padding: 0 16px 30px;
-    animation: slideUp 0.6s cubic-bezier(0.32, 0.72, 0, 1) forwards;
+    padding: 0 12px 24px;
+    max-height: 55%;
+    overflow-y: auto;
+}
+
+.request-list-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: var(--accent-green);
+    margin-bottom: 10px;
+    padding-left: 4px;
+}
+
+.request-count {
+    background: var(--accent-green);
+    color: #000;
+    font-size: 10px;
+    font-weight: 800;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+}
+
+/* Mini request cards */
+.request-mini-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    padding: 14px 16px;
+    margin-bottom: 8px;
+    animation: cardSlideIn 0.4s cubic-bezier(0.32, 0.72, 0, 1) forwards;
+    cursor: pointer;
+    transition: border-color 0.2s, transform 0.15s;
+}
+
+.request-mini-card.hidden {
+    display: none;
+}
+
+@keyframes cardSlideIn {
+    from {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.request-mini-card:active {
+    transform: scale(0.98);
+}
+
+.mini-card-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+    min-width: 0;
+}
+
+.mini-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 800;
+    color: #fff;
+    flex-shrink: 0;
+}
+
+.mini-info {
+    min-width: 0;
+}
+
+.mini-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 2px;
+}
+
+.mini-rating {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+.mini-route {
+    font-size: 12px;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 4px;
+}
+
+.mini-tags {
+    display: flex;
+    gap: 8px;
+}
+
+.mini-tags span {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-dim);
+    background: rgba(255, 255, 255, 0.05);
+    padding: 2px 8px;
+    border-radius: 6px;
+}
+
+.mini-card-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin-left: 12px;
+    flex-shrink: 0;
+}
+
+.mini-fare {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--fare-green);
+}
+
+.mini-pickup {
+    font-size: 10px;
+    color: var(--accent-green);
+    font-weight: 600;
+    margin-top: 2px;
+}
+
+/* Disabled cards */
+.request-card-disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+/* Chanda's card highlight */
+.request-card-chanda {
+    border-color: rgba(99, 102, 241, 0.3);
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), var(--bg-card));
+}
+
+.request-card-chanda:active {
+    border-color: rgba(99, 102, 241, 0.6);
+}
+
+.chanda-fare {
+    font-size: 20px !important;
+}
+
+/* Accept Panel */
+.request-accept-panel {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 6;
+    padding: 20px 16px 30px;
+    background: var(--bg-card);
+    border-top: 1px solid var(--border-color);
+    border-radius: 20px 20px 0 0;
+    animation: slideUp 0.4s cubic-bezier(0.32, 0.72, 0, 1) forwards;
 }
 
 @keyframes slideUp {
@@ -212,6 +409,29 @@ body {
         opacity: 1;
     }
 }
+
+.request-accept-panel.hidden {
+    display: none;
+}
+
+.accept-panel-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.accept-panel-details {
+    flex: 1;
+}
+
+.accept-panel-fare {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--fare-green);
+}
+
+/* Ride Request Card (keep old styles for route-info) */
 
 .request-incoming-label {
     display: flex;
